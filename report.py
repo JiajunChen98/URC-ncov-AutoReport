@@ -10,11 +10,10 @@ import argparse
 from bs4 import BeautifulSoup
 
 class Report(object):
-    def __init__(self, stuid, password, data_path, jinji):
+    def __init__(self, stuid, password, data_path):
         self.stuid = stuid
         self.password = password
         self.data_path = data_path
-        self.jinji = jinji
 
     def report(self):
         loginsuccess = False
@@ -39,9 +38,6 @@ class Report(object):
         with open(self.data_path, "r+") as f:
             data = f.read()
             data = json.loads(data)
-            jinji = self.jinji
-            jinji = json.loads(jinji)
-            data = {**data, **jinji}
             data["_token"] = token
 
         headers = {
@@ -107,9 +103,8 @@ if __name__ == "__main__":
     parser.add_argument('data_path', help='path to your own data used for post method', type=str)
     parser.add_argument('stuid', help='your student number', type=str)
     parser.add_argument('password', help='your CAS password', type=str)
-    parser.add_argument('jinji', help='紧急联系人', type=str)
     args = parser.parse_args()
-    autorepoter = Report(stuid=args.stuid, password=args.password, data_path=args.data_path, jinji=args.jinji)
+    autorepoter = Report(stuid=args.stuid, password=args.password, data_path=args.data_path)
     count = 5
     while count != 0:
         ret = autorepoter.report()
